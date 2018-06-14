@@ -1,4 +1,3 @@
-
 # coding = utf-8
 
 from __future__ import print_function
@@ -9,7 +8,7 @@ from math import ceil
 import caffe
 
 
-VIDEO = "/home/wangbin/PycharmProjects/hello_charm/optical_flow/videoplayback.webm"
+VIDEO = "/home/wangbin/PycharmProjects/hello_charm/mid.mp4"
 FLOW_FILE = "/home/wangbin/PycharmProjects/hello_charm/midpredict.flo"
 caffemodel = "/home/wangbin/github/flownet2/models/FlowNet2/FlowNet2_weights.caffemodel.h5"
 deployproto = "/home/wangbin/github/flownet2/models/FlowNet2/FlowNet2_deploy.prototxt.template"
@@ -54,7 +53,7 @@ def video2flow():
 
     fourcc = cv2.VideoWriter.fourcc('M', 'J', 'P', 'G')
     fps = 8.0
-    writer = cv2.VideoWriter(WRITER, fourcc, fps, (width, height))
+    writer = cv2.VideoWriter(WRITER, fourcc, fps, (width/2, height))
 
     _, frame1 = cap.read()
     _, frame2 = cap.read()
@@ -68,9 +67,10 @@ def video2flow():
             break
         blob = predict_flow(frame1, frame2, net)
         flow = visualize_optical_flow(frame1, blob)
-        cv2.imshow("frame", frame1)
-        cv2.imshow("flow", flow)
-        writer.write(flow)
+        hmerge = np.vstack((frame1, flow))
+        hmerge = cv2.resize(hmerge, (width/2, height))
+        cv2.imshow("frame-flow", hmerge)
+        writer.write(hmerge)
         if cv2.waitKey(100) & 0xFF == ord('q'):
             break
     cap.release()
@@ -124,4 +124,4 @@ def visualize_optical_flow(frame1, blob):
 
 if __name__ == "__main__":
     print("start predict optical flow")
-    video2flow() 
+    video2flow()
