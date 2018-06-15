@@ -9,12 +9,9 @@ import caffe
 
 
 VIDEO = "/home/wangbin/PycharmProjects/hello_charm/mid.mp4"
-FLOW_FILE = "/home/wangbin/PycharmProjects/hello_charm/midpredict.flo"
 caffemodel = "/home/wangbin/github/flownet2/models/FlowNet2/FlowNet2_weights.caffemodel.h5"
 deployproto = "/home/wangbin/github/flownet2/models/FlowNet2/FlowNet2_deploy.prototxt.template"
-WRITER = "/home/wangbin/PycharmProjects/hello_charm/midpredict.avi"
-PREDICT_PNG = "/home/wangbin/PycharmProjects/hello_charm/predict.png"
-
+WRITER = "/home/wangbin/PycharmProjects/hello_charm/midpredict_flow.avi"
 
 def load_model(width, height):
     vars = {}
