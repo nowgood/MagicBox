@@ -1,8 +1,8 @@
 {
-    "server":"107.191.53.192",
-    "server_port":9999,
+    "server":"xxx",
+    "server_port": 9999,
     "local_port":1080,
-    "password":"Wb13261701238",
+    "password":"xxx",
     "timeout":600,
     "method":"aes-256-cfb"
 }
