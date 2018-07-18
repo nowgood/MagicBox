@@ -1,3 +1,3 @@
 ## Script
 
-A Repo to save all kinds of tool to make life better
+A Repo to Save All Kinds of Tools to Make Life Better
