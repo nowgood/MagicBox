@@ -19,7 +19,7 @@
 # Licensed under The MIT License [see LICENSE for details]
 # Written by Bharath Hariharan
 # --------------------------------------------------------
-
+# coding=utf-8
 """Python implementation of the PASCAL VOC devkit's AP evaluation code."""
 
 import _pickle as cPickle
@@ -51,8 +51,9 @@ def parse_rec(filename):
 
 
 def voc_ap(rec, prec, use_07_metric=False):
-    """Compute VOC AP given precision and recall. If use_07_metric is true, uses
-    the VOC 07 11-point method (default:False).
+    """
+    Compute VOC AP given precision and recall.
+    If use_07_metric is true, uses the VOC 07 11-point method (default:False).
     """
     if use_07_metric:
         # 11 point metric
@@ -66,18 +67,39 @@ def voc_ap(rec, prec, use_07_metric=False):
     else:
         # correct AP calculation
         # first append sentinel values at the end
+
+        # np.concatenate(([2], [4, 3], [5]))
+        # Out[16]: array([2, 4, 3, 5])
+        # rec means recall, pre means prediction
         mrec = np.concatenate(([0.], rec, [1.]))
+
+        # recall 为 0 时, mpre的取值不重要, 由于后面用不到,
+        # 用到的 mpre 从 1 开始, 可能使用1, 更符合 recall 小, precision 高的直觉
         mpre = np.concatenate(([0.], prec, [0.]))
 
         # compute the precision envelope
+        # from end to start
+
+        # In [21]: list(range(4, 0, -1))
+        # Out[21]: [4, 3, 2, 1]
         for i in range(mpre.size - 1, 0, -1):
             mpre[i - 1] = np.maximum(mpre[i - 1], mpre[i])
 
-        # to calculate area under PR curve, look for points
-        # where X axis (recall) changes value
+        # to calculate area under PR curve,
+        # look for points where X axis (recall) changes value
+        # 方法很高超
+
+        '''
+        In [54]: a = np.array([0, 0.4, 0.4, 0.6, 0.6, 0.8, 1])
+        In [55]: i = np.where(a[1:] != a[:-1])[0]
+        In [56]: i
+        Out[56]: array([0, 2, 4, 5])
+        In [57]: np.sum(a[i+1]-a[i])
+        Out[57]: 1.0
+        '''
         i = np.where(mrec[1:] != mrec[:-1])[0]
 
-        # and sum (\Delta recall) * prec
+        # and sum (δ recall) * prec
         ap = np.sum((mrec[i + 1] - mrec[i]) * mpre[i + 1])
     return ap
 
